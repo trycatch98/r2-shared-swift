@@ -14,7 +14,7 @@ import Foundation
 
 /// https://github.com/readium/architecture/tree/master/locators
 public struct Locator: Equatable, CustomStringConvertible, Loggable {
-
+    
     /// The URI of the resource that the Locator Object points to.
     public var href: String  // URI
     
@@ -94,7 +94,7 @@ public struct Locator: Equatable, CustomStringConvertible, Loggable {
             "title": encodeIfNotNil(title),
             "locations": encodeIfNotEmpty(locations?.json),
             "text": encodeIfNotEmpty(text?.json)
-        ])
+            ])
     }
     
     public var jsonString: String? {
@@ -136,13 +136,13 @@ public struct LocatorText: Equatable, Loggable {
             log(.error, error)
         }
     }
-
+    
     public var json: [String: Any]? {
         return makeJSON([
             "after": encodeIfNotNil(after),
             "before": encodeIfNotNil(before),
             "highlight": encodeIfNotNil(highlight)
-        ])
+            ])
     }
     
     public var jsonString: String? {
@@ -173,10 +173,17 @@ public struct Locations: Equatable, Loggable {
     /// An index in the publication.
     public var position: Int?      // 3 = goto page
     
-    public init(fragment: String? = nil, progression: Double? = nil, position: Int? = nil) {
+    public var cssSelector: String?
+    public var partialCfi: String?
+    public var domRange: String?
+    
+    public init(fragment: String? = nil, progression: Double? = nil, position: Int? = nil, cssSelector: String? = nil, partialCfi: String? = nil, domRange: String? = nil) {
         self.fragment = fragment
         self.progression = progression
         self.position = position
+        self.cssSelector = cssSelector
+        self.partialCfi = partialCfi
+        self.domRange = domRange
     }
     
     public init(json: Any) throws {
@@ -186,8 +193,11 @@ public struct Locations: Equatable, Loggable {
         self.fragment = json["fragment"] as? String
         self.progression = json["progression"] as? Double
         self.position = json["position"] as? Int
+        self.cssSelector = json["cssSelector"] as? String
+        self.partialCfi = json["partialCfi"] as? String
+        self.domRange = json["domRange"] as? String
     }
-
+    
     public init(jsonString: String) {
         do {
             let json = try JSONSerialization.jsonObject(with: jsonString.data(using: .utf8)!)
@@ -202,8 +212,11 @@ public struct Locations: Equatable, Loggable {
         return makeJSON([
             "fragment": encodeIfNotNil(fragment),
             "progression": encodeIfNotNil(progression),
-            "position": encodeIfNotNil(position)
-        ])
+            "position": encodeIfNotNil(position),
+            "cssSelector": encodeIfNotNil(cssSelector),
+            "partialCfi": encodeIfNotNil(partialCfi),
+            "domRange": encodeIfNotNil(domRange)
+            ])
     }
     
     public var jsonString: String? {
@@ -258,7 +271,7 @@ public class Bookmark {
             creationDate: creationDate
         )
     }
-
+    
     public var resourceHref: String { return locator.href }
     public var resourceType: String { return locator.type }
     public var resourceTitle: String { return locator.title ?? "" }
