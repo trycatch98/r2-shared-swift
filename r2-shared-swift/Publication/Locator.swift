@@ -175,9 +175,9 @@ public struct Locations: Equatable, Loggable {
     
     public var cssSelector: String?
     public var partialCfi: String?
-    public var domRange: String?
+    public var domRange: NSDictionary?
     
-    public init(fragment: String? = nil, progression: Double? = nil, position: Int? = nil, cssSelector: String? = nil, partialCfi: String? = nil, domRange: String? = nil) {
+    public init(fragment: String? = nil, progression: Double? = nil, position: Int? = nil, cssSelector: String? = nil, partialCfi: String? = nil, domRange: NSDictionary? = nil) {
         self.fragment = fragment
         self.progression = progression
         self.position = position
@@ -195,7 +195,7 @@ public struct Locations: Equatable, Loggable {
         self.position = json["position"] as? Int
         self.cssSelector = json["cssSelector"] as? String
         self.partialCfi = json["partialCfi"] as? String
-        self.domRange = json["domRange"] as? String
+        self.domRange = json["domRange"] as? NSDictionary
     }
     
     public init(jsonString: String) {
